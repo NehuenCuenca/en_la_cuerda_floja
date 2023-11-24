@@ -17,6 +17,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
+            'brand_id' => fake()->numberBetween($min = 1, $max = 10),
             'name' => fake()->words($nb = 3, $asText = true),
             'description' => fake()->text($maxNbChars = 150),
             'price_cost' => fake()->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 8)
