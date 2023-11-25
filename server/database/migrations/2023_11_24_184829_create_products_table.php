@@ -18,6 +18,11 @@ return new class extends Migration
             $table->foreign('brand_id')
                     ->references('id')->on('brands')
                     ->onDelete('cascade');
+
+            $table->unsignedBigInteger("category_id")->nullable();        
+            $table->foreign('category_id')
+                    ->references('id')->on('categories')
+                    ->onDelete('cascade');
             
             $table->string('name', 100);
             $table->text('description');
