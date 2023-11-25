@@ -14,6 +14,8 @@ class Role extends Model
         'name',
     ];
 
+    //RELATIONSHIPS
+    //Many roles have many users
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);

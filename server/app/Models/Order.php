@@ -6,22 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Product extends Model
+class Order extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'brand_id',
-        'category_id',
-        'name',
-        'description',
-        'price_cost',
+        'user_id',
+        'status',
+        'total_price',
     ];
 
     //RELATIONSHIPS
-    //Many products are in many orders
-    public function orders(): BelongsToMany
+    //Many orders have many products
+    public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Order::class);
+        return $this->belongsToMany(Product::class);
     }
 }
