@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\BrandController;
 // use App\Http\Controllers\CategoryController;
 // use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,11 +19,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-
-use App\Http\Controllers\UserAuthController;
- 
 Route::post('/register', [UserAuthController::class, 'register_user']);
+Route::post('/login', [UserAuthController::class, 'login_user']);
+Route::middleware('auth:sanctum')->get('/verify-token', [UserAuthController::class, 'verify_token']);
