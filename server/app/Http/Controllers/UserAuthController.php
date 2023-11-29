@@ -100,6 +100,14 @@ class UserAuthController extends Controller
         ]);
     }
 
+    public function logout_user(Request $request){
+        $request->user()->tokens()->delete();
+
+        return response()->json([
+            'message' => "Logout succesfull!"
+        ]);
+    }
+
     public function verify_token(Request $request){
         return $request->user();
     }

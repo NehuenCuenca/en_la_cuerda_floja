@@ -23,6 +23,7 @@ use App\Http\Controllers\UserAuthController;
 //     return $request->user();
 // });
 
-Route::post('/register', [UserAuthController::class, 'register_user']);
-Route::post('/login', [UserAuthController::class, 'login_user']);
-Route::middleware('auth:sanctum')->get('/verify-token', [UserAuthController::class, 'verify_token']);
+Route::post('/register', [UserAuthController::class, 'register_user'])->name('api-register');
+Route::post('/login', [UserAuthController::class, 'login_user'])->name('api-login');
+Route::middleware('auth:sanctum')->get('/logout', [UserAuthController::class, 'logout_user'])->name('api-logout');
+Route::middleware('auth:sanctum')->get('/verify-token', [UserAuthController::class, 'verify_token'])->name('api-verify-token');;
