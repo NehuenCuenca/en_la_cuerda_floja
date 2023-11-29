@@ -11,7 +11,7 @@ class UserAuthController extends Controller
 {
     
     /**
-    * Register a user on the database given an object .
+    * Register a user on the database given an object with the keys: name, email and password.
     */
     public function register_user(Request $request)
     {
@@ -51,6 +51,9 @@ class UserAuthController extends Controller
         ], 201);
     }
 
+    /**
+    * Login a user given an object with the keys: email and password.
+    */
     public function login_user(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -100,6 +103,9 @@ class UserAuthController extends Controller
         ]);
     }
 
+    /**
+    * Logout a user given authorization bearer token.
+    */
     public function logout_user(Request $request){
         $request->user()->tokens()->delete();
 
@@ -107,7 +113,9 @@ class UserAuthController extends Controller
             'message' => "Logout succesfull!"
         ]);
     }
-
+    /**
+    * Checks the user owner of the given authorization bearer token
+    */
     public function verify_token(Request $request){
         return $request->user();
     }

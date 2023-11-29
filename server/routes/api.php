@@ -1,11 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// use App\Http\Controllers\BrandController;
-// use App\Http\Controllers\CategoryController;
-// use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserAuthController;
 
 /*
@@ -25,5 +21,8 @@ use App\Http\Controllers\UserAuthController;
 
 Route::post('/register', [UserAuthController::class, 'register_user'])->name('api-register');
 Route::post('/login', [UserAuthController::class, 'login_user'])->name('api-login');
-Route::middleware('auth:sanctum')->get('/logout', [UserAuthController::class, 'logout_user'])->name('api-logout');
-Route::middleware('auth:sanctum')->get('/verify-token', [UserAuthController::class, 'verify_token'])->name('api-verify-token');;
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/logout', [UserAuthController::class, 'logout_user'])->name('api-logout');
+    Route::get('/verify-token', [UserAuthController::class, 'verify_token'])->name('api-verify-token');
+});
