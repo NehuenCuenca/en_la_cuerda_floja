@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col py-3">
-        <label :for="NameLabelAtribb" class="text-lg font-semibold cursor-pointer">{{name}}: </label>
-        <input :type="typeInput" :id="NameLabelAtribb" :name="name" />
+        <label :for="NameLabelAtribb" class="text-lg font-semibold cursor-pointer underline">{{name}}: </label>
+        <input :type="typeInput" :id="NameLabelAtribb" :name="name" class="py-1 rounded-md" />
     </div>
 </template>
 
