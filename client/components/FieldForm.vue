@@ -1,18 +1,32 @@
 <template>
-    <div class="flex flex-col py-3">
-        <label :for="NameLabelAtribb" class="text-lg font-semibold cursor-pointer underline">{{name}}: </label>
-        <input :type="typeInput" :id="NameLabelAtribb" :name="name" class="py-1 rounded-md" />
+    <div class="flex flex-col py-1">
+        <label :for="nameLabelAtribb" class="text-lg font-semibold cursor-pointer underline">{{ name }}: </label>
+        <input v-model="inputContent" :type="typeInput" :id="nameLabelAtribb" :required="isRequired" :name="name"
+            class="py-1 px-2 rounded-md" @change="showEmptyAlert" />
+        <span v-if="emptyAlert && isRequired" class="text-red-600">This field is empty!</span>
     </div>
 </template>
 
 <script setup>
+// props
 const props = defineProps({
     name: String,
     typeInput: String,
+    isRequired: Boolean,
 })
 
+// refs
+const inputContent = ref('')
+const emptyAlert = ref(false)
+
 // Computed
-const NameLabelAtribb = computed(() => 'label-'+props.name)
+const nameLabelAtribb = computed(() => 'label-' + props.name)
+const isInputEmpty = computed(() => inputContent.value.length === 0)
+
+// methods
+const showEmptyAlert = () => {
+    emptyAlert.value = isInputEmpty.value
+}
 </script>
 
 <style scoped></style>
