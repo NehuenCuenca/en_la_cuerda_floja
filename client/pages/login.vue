@@ -3,8 +3,8 @@
         <img class="rounded-3xl" src="../assets/entry-guitar.webp" alt="Entry guitar picture">
 
         <form @submit.prevent="handleFormLogin" id="login-form" class="flex flex-col justify-center items-center gap-y-3">
-            <FieldForm :name="'Email'" :typeInput="'email'" :isRequired="true"/>
-            <FieldForm :name="'Password'" :typeInput="'password'"/>
+            <FieldForm :name="'email'" :typeInput="'email'" :isRequired="true" @captureInput="handleNewInput" />
+            <FieldForm :name="'password'" :typeInput="'password'" @captureInput="handleNewInput" />
             <button type="submit" class="px-12 py-1 bg-orange-600 text-lg text-white font-semibold">Enviar</button>
             <span>________________</span>
             <NuxtLink to="/register" class="font-semibold text-xl">Registrate acá</NuxtLink>
@@ -19,9 +19,24 @@ export default {
 </script>
 
 <script setup>
-    const handleFormLogin = () => { 
-        console.log('The form is submitted');
+
+//METHODS
+const handleFormLogin = async () => { 
+    console.log(fields.value);
+    const emptyFields = searchEmptyFields()
+
+    if( emptyFields.length > 0 ){
+        alert(`Los siguientes campos estan vacios, rellenalos por favor: \n ${emptyFields}`)
+        return
     }
+
+    // const { data, pending, error, refresh } = await useFetch(`http://127.0.0.1:8000/api/login`, { method: 'POST', body: fields.value })
+    // console.log(data, error);
+}
+
+// COMPOSABLES
+const { fields, handleNewInput, searchEmptyFields } = useFieldForm()
+
 </script>
 
 <style scoped></style>
