@@ -23,8 +23,9 @@ class UserAuthController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
+                "message" => 'Error validating credentials',
                 "errors" => $validator->errors()
-            ]);
+            ], 400);
         }
 
         $inputsPassed = $request->input();
@@ -33,6 +34,7 @@ class UserAuthController extends Controller
 
         if($emailAlreadyRegistered){
             return response()->json([
+                "message" => 'Error validating credentials',
                 "errors" => [
                     "email" => ["Email '$inputsPassed[email]' has been already registered."]
                 ]
@@ -63,8 +65,9 @@ class UserAuthController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
+                "message" => 'Error validating credentials',
                 "errors" => $validator->errors()
-            ]);
+            ], 400);
         }
 
         $inputsPassed = $request->input();
@@ -72,6 +75,7 @@ class UserAuthController extends Controller
         $emailNotFound = User::where('email', $inputsPassed['email'])->exists();
         if(!$emailNotFound){
             return response()->json([
+                "message" => 'Error validating credentials',
                 "errors" => [
                     "email" => ["Email '$inputsPassed[email]' is not registered on the system."]
                 ]
@@ -83,10 +87,11 @@ class UserAuthController extends Controller
         $passwordsMatches = password_verify($inputsPassed['password'], $userFounded->password);
         if (!$passwordsMatches) {
             return response()->json([
+                "message" => 'Error validating credentials',
                 "errors" => [
                     "password" => ["Password isn't correct."]
                 ]
-            ], 500);
+            ], 400);
         }
 
         // dd($userFounded->tokens);
