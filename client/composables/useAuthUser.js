@@ -39,6 +39,38 @@ export function useAuthUser() {
         router.push({ name: 'home' })
     };
 
+    const registerUser = async (credentials) => {
+        cleanErrorState();
+
+        // Get the csrf cookie
+        await useFetch(`http://127.0.0.1:8000/sanctum/csrf-cookie`);
+
+        // Send the user info for register
+        const { data, pending, error, status } = await useFetch(
+            `http://127.0.0.1:8000/api/register`,
+            {
+                method: "POST",
+                body: credentials,
+                headers: {
+                    Accept: "application/json",
+                    withCredentials: "true",
+                },
+            }
+        );
+
+        // If got error, then, show error sign, and map all the errors
+        if (error.value) {
+            handleErrorsFromBackend({ error, status });
+            return
+        }
+
+        // If got no error, then, navigate to login page
+        const { message } = data.value;
+        alert(message);
+
+        router.push({ name: 'login' })
+    };
+
     const cleanErrorState = () => { 
         haveErrorsFromBackend.value = false;
         messageFromBackend.value = "";
@@ -64,6 +96,7 @@ export function useAuthUser() {
 
     return {
         logginUser,
+        registerUser,
         haveErrorsFromBackend,
         messageFromBackend,
         errorsFromBackend,

@@ -36,7 +36,7 @@ class UserAuthController extends Controller
             return response()->json([
                 "message" => 'Error validating credentials',
                 "errors" => [
-                    "email" => ["Email '$inputsPassed[email]' has been already registered."]
+                    "email" => ["'$inputsPassed[email]' has been already registered."]
                 ]
             ], 400);
         }
@@ -77,7 +77,7 @@ class UserAuthController extends Controller
             return response()->json([
                 "message" => 'Error validating credentials',
                 "errors" => [
-                    "email" => ["Email '$inputsPassed[email]' is not registered on the system."]
+                    "email" => ["'$inputsPassed[email]' is not registered on the system."]
                 ]
             ], 400);
         }
@@ -89,7 +89,7 @@ class UserAuthController extends Controller
             return response()->json([
                 "message" => 'Error validating credentials',
                 "errors" => [
-                    "password" => ["Password isn't correct."]
+                    "password" => ["The password given isn't correct."]
                 ]
             ], 400);
         }
