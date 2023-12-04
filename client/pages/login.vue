@@ -24,14 +24,6 @@ export default {
 
 <script setup>
 
-// STATE
-const haveErrorsFromBackend = ref(false)
-const messageFromBackend = ref('')
-const errorsFromBackend = ref([])
-
-//METHODS
-
-// todo: refactor this fn handleFormLogin
 const handleFormLogin = async () => {
     // Basic validation if some fields are empty
     const emptyFields = searchEmptyFields()
@@ -40,51 +32,13 @@ const handleFormLogin = async () => {
         return
     }
 
-    // Get the csrf cookie
-    await useFetch(`http://127.0.0.1:8000/sanctum/csrf-cookie`)
-
-    // Get the token
-    const { data, pending, error, status } = await useFetch(`http://127.0.0.1:8000/api/login`, {
-        method: 'POST',
-        body: fields.value,
-        headers: {
-            'Accept': 'application/json',
-            'withCredentials': 'true',
-        },
-    })
-
-    // Clean the error state
-    haveErrorsFromBackend.value = false
-    messageFromBackend.value = ''
-    errorsFromBackend.value = []
-
-    // If got error, then, show error sign, and map all the errors
-    if (error.value) {
-        (status.value === 'error')
-            ? haveErrorsFromBackend.value = true
-            : haveErrorsFromBackend.value = false
-
-        const { data: { message, errors } } = error.value
-        const formatedErrors = Object.entries(errors)
-            .map(([field, acumulatedErrors]) => `*${field}: ${acumulatedErrors}`)
-
-        messageFromBackend.value = `${message}`;
-        errorsFromBackend.value  = formatedErrors;
-
-        return
-    }
-
-    // If got no error, then, set the token and navigate to home page
-    const { message, token } = data.value
-    alert(message)
-    localStorage.setItem('en_la_cuerda_floja_token', token)
-
-    router.push({ name: 'home' })
+    logginUser(fields.value)
 }
 
 // COMPOSABLES
 const { fields, handleNewInput, searchEmptyFields } = useFieldForm()
-const router = useRouter()
+const { logginUser, haveErrorsFromBackend, messageFromBackend, errorsFromBackend, } = useAuthUser()
+
 
 </script>
 
