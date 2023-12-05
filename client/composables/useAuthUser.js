@@ -71,6 +71,20 @@ export function useAuthUser() {
         router.push({ name: 'login' })
     };
 
+    const getUserInfo = async(token) => { 
+        const { data, pending, error, status } = await useFetch(`http://127.0.0.1:8000/api/verify-token`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token.value}`,
+                'Accept': 'application/json',
+                'withCredentials': 'true',
+            },
+        })
+        
+        // store the user info in pinia or vuex
+        console.log(data.value);
+    }
+
     const cleanErrorState = () => { 
         haveErrorsFromBackend.value = false;
         messageFromBackend.value = "";
@@ -97,6 +111,7 @@ export function useAuthUser() {
     return {
         logginUser,
         registerUser,
+        getUserInfo,
         haveErrorsFromBackend,
         messageFromBackend,
         errorsFromBackend,

@@ -5,26 +5,17 @@
 </template>
 
 <script setup>
+// STATE
 const token = ref('')
 
+// LIFECYCLE HOOKS
 onMounted(async() => {
     token.value = localStorage.getItem('en_la_cuerda_floja_token')
-    console.log(token.value);
-    await getUserInfo()
+    await getUserInfo(token.value)
 })
 
-const getUserInfo = async() => { 
-    const { data, pending, error, status } = await useFetch(`http://127.0.0.1:8000/api/verify-token`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token.value}`,
-            'Accept': 'application/json',
-            'withCredentials': 'true',
-        },
-    })
-    // store the user info
-    console.log(data.value);
- }
+// COMPOSABLES
+const { getUserInfo } = useAuthUser()
 </script>
 
 <style scoped>

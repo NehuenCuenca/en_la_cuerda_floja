@@ -3,8 +3,8 @@
         <div id="logo" class="text-yellow-300 text-xl font-bold w-40 text-center">
             En la cuerda floja <i>🎸</i>    
         </div>
-        <form id="search-products" class="w-min">
-            <input type="text" placeholder="🔎   Buscar producto..." class=" p-2 outline-none">
+        <form id="search-products" class="w-2/4">
+            <input type="text" placeholder="🔎   Buscar producto..." class="w-full border-none rounded-lg py-2 px-3 outline-none">
         </form>
         <nav class="w-1/6 px-4 border-b-black">
             <ul class="h-full flex justify-between items-center">

@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col py-1">
-        <label :for="nameLabelAtribb" class="text-lg font-semibold cursor-pointer underline">{{ name }}: </label>
+        <label :for="nameLabelAtribb" class="text-lg capitalize font-semibold cursor-pointer underline">{{ name }}: </label>
         <input v-model="inputContent" :type="typeInput" :id="nameLabelAtribb" :required="isRequired" :name="name"
             class="py-1 px-2 rounded-md" @change="handleChange" />
         <span v-if="emptyAlert && isRequired" class="text-red-600">This field is empty!</span>
