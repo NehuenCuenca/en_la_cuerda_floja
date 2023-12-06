@@ -2,6 +2,9 @@
     <div>
         <h1>This is the home</h1>
         <Carousel />
+        <hr>
+        <GridProductsList :quantityItems="8"/>
+        <hr>
     </div>
 </template>
 
