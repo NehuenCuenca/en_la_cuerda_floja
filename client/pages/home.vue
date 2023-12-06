@@ -5,6 +5,9 @@
         <hr>
         <GridProductsList :quantityItems="8"/>
         <hr>
+        <div class="bg-blue-400 text-black min-h-[50vh] flex flex-col items-center justify-center gap-6">
+            <GridBrandsList />
+        </div>
     </div>
 </template>
 
