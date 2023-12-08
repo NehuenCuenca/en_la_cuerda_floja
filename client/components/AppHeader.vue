@@ -1,5 +1,5 @@
 <template>
-    <header class="w-full bg-yellow-600 py-7 px-5 flex justify-between items-center">
+    <header class="w-full h-1/6 bg-yellow-600 py-7 px-5 flex justify-between items-center">
         <div id="logo" class="text-yellow-300 text-xl font-bold w-40 text-center">
             En la cuerda floja <i>🎸</i>    
         </div>

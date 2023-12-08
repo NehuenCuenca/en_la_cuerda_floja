@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h1>This is the home</h1>
         <Carousel />
         <hr>
         <GridProductsList :quantityItems="8" />
@@ -15,6 +14,9 @@
             <CaracteristicItem v-for="(caracteristic, indexCaracteristic) in caracteristics" :key="indexCaracteristic"
                 :caracteristicInfo="caracteristic" />
         </ul>
+        <hr>
+        <GridProductsList :title-list="'Otros productos interesantisimos!'" :quantityItems="8" />
+        <hr>
     </div>
 </template>
 
