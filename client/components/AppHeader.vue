@@ -1,15 +1,29 @@
 <template>
-    <header class="w-full h-1/6 bg-yellow-600 py-7 px-5 flex justify-between items-center">
+    <header class="relative w-full h-1/6 bg-yellow-600 py-7 px-5 flex justify-between items-center">
         <div id="logo" class="text-yellow-300 text-xl font-bold w-40 text-center">
-            En la cuerda floja <i>🎸</i>    
+            En la cuerda floja <i>🎸</i>
         </div>
         <form id="search-products" class="w-2/4">
-            <input type="text" placeholder="🔎   Buscar producto..." class="w-full border-none rounded-lg py-2 px-3 outline-none">
+            <input type="text" placeholder="🔎   Buscar producto..."
+                class="w-full border-none rounded-lg py-2 px-3 outline-none">
         </form>
         <nav class="w-1/6 px-4 border-b-black">
             <ul class="h-full flex justify-between items-center">
-                <HeaderNavItem v-for="navItem in navItems" :navItem="navItem" />
+                <HeaderNavItem v-for="(navItem, i) in navItems" :key="i" :navItem="navItem" />
             </ul>
+        </nav>
+        <nav ref="hamburguerMenu"
+            class="opacity-0 pointer-events-none fixed top-0 right-0 w-1/3 px-2 h-screen z-50 bg-orange-400 bg-opacity-95 transition-all">
+            <div class="flex flex-col gap-10 py-4">
+                <button @click="toggleHamburgerMenu" class="text-white font-semibold text-3xl">X</button>
+
+                <div class="flex flex-col gap-5 justify-center items-center">
+                    <h3 class="text-center font-semibold text-xl">Enlaces</h3>
+                    <ul class="flex flex-col gap-3 justify-center items-center">
+                        <HamburgerMenuLinkItem v-for="(linkItem, j) in hamburguerMenuLinks" :key="j" :linkItem="linkItem" />
+                    </ul>
+                </div>
+            </div>
         </nav>
     </header>
 </template>
@@ -20,20 +34,51 @@ export default {
 }
 </script>
 <script setup>
-    const navItems = ref([
-        {
-            emoji: '👤',
-            fn: () => console.log('Send user to the route /user')
-        },
-        {
-            emoji: '🛒',
-            fn: () => console.log('Open the cart')
-        },
-        {
-            emoji: '🍔',
-            fn: () => console.log('Open hamburguer menu')
-        }
-    ])
+const hamburguerMenu = ref(null)
+
+const toggleHamburgerMenu = () => {
+    hamburguerMenu.value.classList.toggle('opacity-0')
+    hamburguerMenu.value.classList.toggle('pointer-events-none')
+}
+
+const navItems = ref([
+    {
+        emoji: '👤',
+        fn: () => console.log('Send user to the route /user')
+    },
+    {
+        emoji: '🛒',
+        fn: () => console.log('Open the cart')
+    },
+    {
+        emoji: '🍔',
+        fn: toggleHamburgerMenu
+    }
+])
+
+const hamburguerMenuLinks = ref([
+    {
+        title: 'Marcas',
+        fn: toggleHamburgerMenu,
+        route: '/home'
+    },
+    {
+        title: 'Categorias',
+        fn: toggleHamburgerMenu,
+        route: '/home'
+    },
+    {
+        title: 'Reparaciones',
+        fn: toggleHamburgerMenu,
+        route: '/home'
+    },
+    {
+        title: 'FAQ / Ayuda',
+        fn: toggleHamburgerMenu,
+        route: '/home'
+    },
+])
+
 </script>
 
 <style scoped></style>

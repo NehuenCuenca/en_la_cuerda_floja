@@ -1,7 +1,7 @@
 <template>
     <div class="relative slide">
         <div class="carousel-indicators absolute bottom-0 flex bg-yellow-100 h-24 w-full justify-center items-center">
-            <ol class="z-50 flex w-4/12 justify-center">
+            <ol class="z-40 flex w-4/12 justify-center">
                 <li v-for="(img, i) in images" :key="i" @click="chooseActive(i)" class="md:w-4 md:h-4 bg-gray-300 rounded-full cursor-pointer mx-2">
                 </li>
             </ol>
