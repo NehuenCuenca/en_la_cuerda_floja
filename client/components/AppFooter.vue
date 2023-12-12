@@ -1,5 +1,5 @@
 <template>
-    <footer class="w-full h-2/6 bg-yellow-200 py-7 px-5 flex justify-between items-center gap-7">
+    <footer class="w-full h-2/6 bg-beigeDark py-7 px-5 flex justify-between items-center gap-7">
         <div>
             <h3 class="text-lg font-semibold underline underline-offset-4">Nuestras redes</h3>
             <ul class="flex gap-4">

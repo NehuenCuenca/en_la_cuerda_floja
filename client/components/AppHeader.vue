@@ -1,6 +1,6 @@
 <template>
-    <header class="relative w-full h-1/6 bg-yellow-600 py-7 px-5 flex justify-between items-center">
-        <div id="logo" class="text-yellow-300 text-xl font-bold w-40 text-center">
+    <header class="relative w-full h-1/6 bg-beigeDark py-7 px-5 flex justify-between items-center">
+        <div id="logo" class="text-beige text-xl font-bold w-40 text-center">
             En la cuerda floja <i>🎸</i>
         </div>
         <form id="search-products" class="w-2/4">
@@ -13,7 +13,7 @@
             </ul>
         </nav>
         <nav ref="hamburguerMenu"
-            class="opacity-0 pointer-events-none fixed top-0 right-0 w-1/3 px-2 h-screen z-50 bg-orange-400 bg-opacity-95 transition-all">
+            class="opacity-0 pointer-events-none fixed top-0 right-0 w-1/3 px-2 h-screen z-50 bg-beigeStrong bg-opacity-95 transition-all">
             <div class="flex flex-col gap-10 py-4">
                 <button @click="toggleHamburgerMenu" class="text-white font-semibold text-3xl">X</button>
 

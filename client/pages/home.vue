@@ -4,7 +4,7 @@
         <hr>
         <GridProductsList :quantityItems="8" />
         <hr>
-        <div class="bg-blue-400 text-black min-h-[50vh] py-10 flex flex-col items-center justify-center gap-6">
+        <div class="bg-beige text-black min-h-[50vh] py-10 flex flex-col items-center justify-center gap-6">
             <GridBrandsList />
         </div>
         <hr>

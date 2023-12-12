@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-yellow-300">
+    <div class="bg-beigeLight">
         <AppHeader />
 
         <!-- output of the page -->

@@ -1,5 +1,5 @@
 <template>
-    <li :class="rowStart + ' ' + colStart" class="bg-white py-10 px-4 rounded">Brand {{ props.indexItem }}</li>
+    <li :class="rowStart + ' ' + colStart" class="bg-greyCard py-10 px-4 rounded">Brand {{ props.indexItem }}</li>
 </template>
 
 <script setup>
