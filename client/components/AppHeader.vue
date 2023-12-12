@@ -60,12 +60,12 @@ const hamburguerMenuLinks = ref([
     {
         title: 'Marcas',
         fn: toggleHamburgerMenu,
-        route: '/home'
+        route: '/brands'
     },
     {
         title: 'Categorias',
         fn: toggleHamburgerMenu,
-        route: '/home'
+        route: '/categories'
     },
     {
         title: 'Reparaciones',
