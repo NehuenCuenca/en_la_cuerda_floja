@@ -1,7 +1,7 @@
 <template>
-    <div class="bg-beigeStrong px-10 py-5 flex flex-col justify-center items-center">
+    <div class="bg-beigeStrong flex flex-col justify-center items-center">
         <h1 v-if="props.titleList" class="text-3xl underline underline-offset-4 text-center">{{ titleList }}</h1>
-        <ul class="w-full flex py-10 flex-wrap justify-around gap-4">
+        <ul class="w-full flex py-4 flex-wrap justify-around gap-4">
             <GridProductItem v-for="(product, i) in props.quantityItems" :key="i"/>
         </ul>
     </div>

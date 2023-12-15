@@ -1,9 +1,9 @@
 <template>
-    <div class="bg-beigeLight">
+    <div class=" bg-beigeLight flex flex-col">
         <AppHeader />
 
         <!-- output of the page -->
-        <div>
+        <div class="min-h-screen basis-full">
             <slot />
         </div>
 

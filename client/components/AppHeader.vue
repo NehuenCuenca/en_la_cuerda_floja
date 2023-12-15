@@ -1,7 +1,9 @@
 <template>
     <header class="relative w-full h-1/6 bg-beigeDark py-7 px-5 flex justify-between items-center">
         <div id="logo" class="text-beige text-xl font-bold w-40 text-center">
-            En la cuerda floja <i>🎸</i>
+            <NuxtLink to="/home">
+                En la cuerda floja <i>🎸</i>
+            </NuxtLink>
         </div>
         <form id="search-products" class="w-2/4">
             <input type="text" placeholder="🔎   Buscar producto..."
