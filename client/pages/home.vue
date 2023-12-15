@@ -2,20 +2,24 @@
     <div>
         <Carousel />
         <hr>
-        <GridProductsList :quantityItems="8" />
+        <div class="bg-beigeStrong p-10">
+            <GridProductsList :quantityItems="8" />
+        </div>
         <hr>
-        <div class="bg-beige text-black min-h-[50vh] py-10 flex flex-col items-center justify-center gap-6">
+        <div class="bg-beige text-black py-10 flex flex-col items-center justify-center gap-6">
             <GridBrandsList />
         </div>
         <hr>
         <Carousel />
         <hr>
-        <ul class="min-h-[30vh] px-36 py-10 flex justify-between items-center">
+        <ul class="px-36 py-10 flex justify-between items-center">
             <CaracteristicItem v-for="(caracteristic, indexCaracteristic) in caracteristics" :key="indexCaracteristic"
                 :caracteristicInfo="caracteristic" />
         </ul>
         <hr>
-        <GridProductsList :title-list="'Otros productos interesantisimos!'" :quantityItems="8" />
+        <div class="bg-beigeStrong p-10">
+            <GridProductsList :title-list="'Otros productos interesantisimos!'" :quantityItems="8" />
+        </div>
         <hr>
     </div>
 </template>
