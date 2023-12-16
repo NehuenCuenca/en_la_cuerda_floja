@@ -1,7 +1,7 @@
 <template>
     <header class="relative w-full h-1/6 bg-beigeDark py-7 px-5 flex justify-between items-center">
         <div id="logo" class="text-beige text-xl font-bold w-40 text-center">
-            <NuxtLink to="/home">
+            <NuxtLink to="/">
                 En la cuerda floja <i>🎸</i>
             </NuxtLink>
         </div>
@@ -86,12 +86,12 @@ const hamburguerMenuLinks = ref([
     {
         title: 'Reparaciones',
         fn: toggleHamburgerMenu,
-        route: '/home'
+        route: '/'
     },
     {
         title: 'FAQ / Ayuda',
         fn: toggleHamburgerMenu,
-        route: '/home'
+        route: '/'
     },
 ])
 
