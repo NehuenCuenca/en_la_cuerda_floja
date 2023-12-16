@@ -1,6 +1,7 @@
 <template>
     <div class="min-h-full px-5 py-10 grid grid-cols-4 grid-rows-[auto_repeat(3,minmax(0,_1fr)] gap-3 ">
-        <h1 class="col-span-full row-span-1 self-start px-4 py-2 bg-beigeStrong text-2xl font-semibold">Resultados de la busqueda de
+        <h1 class="col-span-full row-span-1 self-start px-4 py-2 bg-beigeStrong text-2xl font-semibold">Resultados de la
+            busqueda de
             ‘Producto X’:</h1>
 
         <form class="p-4 col-span-1 row-span-4 bg-beigeStrong flex flex-col gap-3">

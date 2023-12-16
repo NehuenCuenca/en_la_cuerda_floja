@@ -5,8 +5,8 @@
                 En la cuerda floja <i>🎸</i>
             </NuxtLink>
         </div>
-        <form id="search-products" class="w-2/4">
-            <input type="text" placeholder="🔎   Buscar producto..."
+        <form id="search-products" class="w-2/4" @submit.prevent="searchProduct">
+            <input type="text" placeholder="🔎   Buscar producto..." v-model="productToSearch"
                 class="w-full border-none rounded-lg py-2 px-3 outline-none">
         </form>
         <nav class="w-1/6 px-4 border-b-black">
@@ -36,12 +36,26 @@ export default {
 }
 </script>
 <script setup>
-const hamburguerMenu = ref(null)
 
+// METHODS
 const toggleHamburgerMenu = () => {
     hamburguerMenu.value.classList.toggle('opacity-0')
     hamburguerMenu.value.classList.toggle('pointer-events-none')
 }
+
+const searchProduct = () => {
+    const sanitizedString = productToSearch.value.trim()
+    if (sanitizedString.length <= 0) {
+        alert('Error: el campo de busqueda de producto esta vacio.')
+        return
+    }
+
+    router.push({ path: `searching-products`, query: { productToSearch: sanitizedString } })
+}
+
+// STATE
+const productToSearch = ref('')
+const hamburguerMenu = ref(null)
 
 const navItems = ref([
     {
@@ -80,6 +94,9 @@ const hamburguerMenuLinks = ref([
         route: '/home'
     },
 ])
+
+// COMPOSABLES
+const router = useRouter()
 
 </script>
 
