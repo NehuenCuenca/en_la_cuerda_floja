@@ -66,14 +66,33 @@ const filters = ref({
 const productName = computed(() => route.query.productToSearch)
 
 // WATCHERS
-watch(router.currentRoute, (newCurrentRoute, oldCurrentRoute) => {
+watch(router.currentRoute, (newRoute, oldRoute) => {
     filters.value = {
-        ...newCurrentRoute.query,
+        ...newRoute.query,
         page: 1,
     }
+    
+    const haveExtraFilters = [
+        filters.value.hasOwnProperty('category'),
+        filters.value.hasOwnProperty('state')
+    ].some( filter => filter )
+    
+    if( !haveExtraFilters ) { unpaintFilters() }
 })
 
 // METHODS
+const unpaintFilters = () => { 
+    const allFiltersLists = document.querySelectorAll('form ul')
+    for (let i = 0; i < allFiltersLists.length; i++) {
+        const filterList = allFiltersLists[i];
+        const filtersButtons = filterList.querySelectorAll('li button.font-semibold')
+        if (filtersButtons.length === 0) { break; }
+        filtersButtons.forEach( filter => {
+            filter.classList.remove('font-semibold') 
+        });
+    }
+ }
+
 const setFilter = (e, nameFilter) => {
     // Removing style classes from previous filter
     const filterList = e.target.parentElement.parentElement
