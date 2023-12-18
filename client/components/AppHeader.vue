@@ -50,7 +50,13 @@ const searchProduct = () => {
         return
     }
 
-    router.push({ path: `/searching-products`, query: { productToSearch: sanitizedString } })
+    router.push({ 
+        path: `/searching-products`, 
+        query: { 
+            productToSearch: sanitizedString,
+            page: 1,
+        },
+    })
 }
 
 // STATE

@@ -35,18 +35,18 @@
 
         <GridProductsList :quantityItems="9" class="col-span-3 row-span-3" />
 
-        <ul class="px-3 col-span-1 row-span-1 bg-gray-600 h-10 w-2/4 flex gap-4 items-center">
-            <li class="text-xl font-semibold">
-                <button>1</button>
+        <ul class="px-3 col-span-1 row-span-1 bg-gray-600 h-10 w-min flex gap-4 items-center">
+            <li class="h-full text-center text-xl font-semibold hover:bg-gray-400 transition-colors">
+                <button class="h-full px-3" @click="handleProductsListPage">1</button>
             </li>
-            <li class="text-xl font-semibold">
-                <button>2</button>
+            <li class="h-full text-center text-xl font-semibold hover:bg-gray-400 transition-colors">
+                <button class="h-full px-3" @click="handleProductsListPage">2</button>
             </li>
-            <li class="text-xl font-semibold">
-                <button>3</button>
+            <li class="h-full text-center text-xl font-semibold hover:bg-gray-400 transition-colors">
+                <button class="h-full px-3" @click="handleProductsListPage">3</button>
             </li>
-            <li class="text-xl font-semibold">
-                <button>...</button>
+            <li class="h-full text-center text-xl font-semibold hover:bg-gray-400 transition-colors">
+                <button class="h-full px-3" @click="handleProductsListPage">...</button>
             </li>
         </ul>
     </div>
@@ -54,7 +54,7 @@
 
 <script setup>
 // COMPOSABLES
-const route  = useRoute()
+const route = useRoute()
 const router = useRouter()
 
 // STATE
@@ -64,6 +64,14 @@ const filters = ref({
 
 // COMPUTED
 const productName = computed(() => route.query.productToSearch)
+
+// WATCHERS
+watch(router.currentRoute, (newCurrentRoute, oldCurrentRoute) => {
+    filters.value = {
+        ...newCurrentRoute.query,
+        page: 1,
+    }
+})
 
 // METHODS
 const setFilter = (e, nameFilter) => {
@@ -86,6 +94,23 @@ const setFilter = (e, nameFilter) => {
         query: {
             ...route.query,
             ...filters.value
+        }
+    })
+}
+
+const handleProductsListPage = (e) => {
+    let pageValue = Number(e.target.textContent)
+    if (isNaN(pageValue)) {
+        console.log('last page');
+        pageValue = 100 //When backend has pagination change this harcoded value to last page
+    }
+
+    router.push({
+        path: `/searching-products`,
+        query: {
+            ...route.query,
+            ...filters.value,
+            page: pageValue
         }
     })
 }
