@@ -37,6 +37,14 @@ export default {
 </script>
 <script setup>
 
+// COMPOSABLES
+const router = useRouter()
+
+// WATCHERS
+watch(router.currentRoute, (newRoute, oldRoute) => {
+    productToSearch.value = newRoute.query.productToSearch || ''
+})
+
 // METHODS
 const toggleHamburgerMenu = () => {
     hamburguerMenu.value.classList.toggle('opacity-0')
@@ -61,7 +69,7 @@ const searchProduct = () => {
 
 // STATE
 const productToSearch = ref('')
-const hamburguerMenu = ref(null)
+const hamburguerMenu  = ref(null)
 
 const navItems = ref([
     {
@@ -100,9 +108,6 @@ const hamburguerMenuLinks = ref([
         route: '/'
     },
 ])
-
-// COMPOSABLES
-const router = useRouter()
 
 </script>
 

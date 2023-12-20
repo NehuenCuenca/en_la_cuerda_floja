@@ -6,31 +6,11 @@
 
         <form @submit.prevent class="p-4 col-span-1 row-span-4 bg-beigeStrong flex flex-col gap-3">
             <h1 class="text-2xl font-semibold place-self-center">Filtros</h1>
-            <div class="flex flex-col">
-                <h3 class="underline font-semibold">Categorias</h3>
-                <ul>
-                    <li class="text-gray-700">
-                        <button @click="(e) => setFilter(e, 'category')">Categoria 1</button>
-                    </li>
-                    <li class="text-gray-700">
-                        <button @click="(e) => setFilter(e, 'category')">Categoria 2</button>
-                    </li>
-                    <li class="text-gray-700">
-                        <button @click="(e) => setFilter(e, 'category')">Categoria 3</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="flex flex-col">
-                <h3 class="underline font-semibold">Estado</h3>
-                <ul>
-                    <li class="text-gray-700">
-                        <button @click="(e) => setFilter(e, 'state')">Nuevo</button>
-                    </li>
-                    <li class="text-gray-700">
-                        <button @click="(e) => setFilter(e, 'state')">Usado</button>
-                    </li>
-                </ul>
-            </div>
+            <ProductsFiltersList :filterTag="'category'" :filterTitle="'Categoria'" :filters="staticFilters.category"
+                @updateFilters="handleUpdateFilters" />
+
+            <ProductsFiltersList :filterTag="'state'" :filterTitle="'Estado'" :filters="staticFilters.state"
+                @updateFilters="handleUpdateFilters" />
         </form>
 
         <GridProductsList :quantityItems="9" class="col-span-3 row-span-3" />
@@ -62,6 +42,18 @@ const filters = ref({
     ...route.query,
 })
 
+const staticFilters = ref({
+    category: [
+        { name: 'Categoria 1' },
+        { name: 'Categoria 2' },
+        { name: 'Categoria 3' },
+    ],
+    state: [
+        { name: 'Nuevo' },
+        { name: 'Usado' },
+    ]
+})
+
 // COMPUTED
 const productName = computed(() => route.query.productToSearch)
 
@@ -71,43 +63,17 @@ watch(router.currentRoute, (newRoute, oldRoute) => {
         ...newRoute.query,
         page: 1,
     }
-    
-    const haveExtraFilters = [
-        filters.value.hasOwnProperty('category'),
-        filters.value.hasOwnProperty('state')
-    ].some( filter => filter )
-    
-    if( !haveExtraFilters ) { unpaintFilters() }
 })
 
 // METHODS
-const unpaintFilters = () => { 
-    const allFiltersLists = document.querySelectorAll('form ul')
-    for (let i = 0; i < allFiltersLists.length; i++) {
-        const filterList = allFiltersLists[i];
-        const filtersButtons = filterList.querySelectorAll('li button.font-semibold')
-        if (filtersButtons.length === 0) { break; }
-        filtersButtons.forEach( filter => {
-            filter.classList.remove('font-semibold') 
-        });
-    }
- }
-
-const setFilter = (e, nameFilter) => {
-    // Removing style classes from previous filter
-    const filterList = e.target.parentElement.parentElement
-    const previousFilter = filterList.querySelector('li button.font-semibold')
-    if (previousFilter) { previousFilter.classList.remove('font-semibold') }
-    e.target.classList.add('font-semibold')
-
-    // Updating filters
-    const valueFilter = e.target.textContent
+const handleUpdateFilters = (newFilter) => {
+    // update filters
     filters.value = {
         ...filters.value,
-        [nameFilter]: valueFilter
+        ...newFilter
     }
 
-    // Updating the url
+    // update the url
     router.push({
         path: `/searching-products`,
         query: {
