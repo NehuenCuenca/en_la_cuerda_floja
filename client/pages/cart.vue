@@ -1,5 +1,5 @@
 <template>
-    <div class="p-10">
+    <div class="p-10 flex flex-col w-full justify-center items-center gap-5">
         <div class="table_cart" role="region" tabindex="0">
             <table>
                 <caption class="font-semibold text-3xl underline mb-5 ">Mi carrito</caption>
@@ -13,28 +13,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <CartTableRow v-for="(product, indexProduct) in productsInCart" :product-item="product"
+                    <CartTableRow v-for="(product, indexProduct) in store.allProducts" :product-item="product"
                         :key="indexProduct" />
                 </tbody>
             </table>
         </div>
 
+        <form @submit.prevent class="flex flex-col w-1/4">
+            <button type="submit" class="px-5 py-2 text-2xl text-center bg-emerald-700 text-white border-none ">Finalizar compra</button>
+            <NuxtLink to="/" class="px-5 py-2 text-2xl text-center bg-white text-gray-600 border-2 border-text-gray-600 ">Buscar mas articulos</NuxtLink>
+        </form>
     </div>
 </template>
 
 <script setup>
-const productsInCart = [
-    {
-        name: 'Flauta melodica shurer 500 gb rigida boquilla',
-        price: 999.99,
-        quantity: 1,
-    },
-    {
-        name: 'Microfono de mano squire inalambrico metal',
-        price: 999.99,
-        quantity: 3,
-    }
-]
+
+import { useCartStore } from '@/stores/CartStore'
+const store = useCartStore()
 </script>
 
 <style >
