@@ -78,7 +78,7 @@ const navItems = ref([
     },
     {
         emoji: '🛒',
-        fn: () => console.log('Open the cart')
+        fn: () => router.push({ name: 'cart' })
     },
     {
         emoji: '🍔',

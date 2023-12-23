@@ -1,0 +1,85 @@
+<template>
+    <div class="p-10">
+        <div class="table_cart" role="region" tabindex="0">
+            <table>
+                <caption class="font-semibold text-3xl underline mb-5 ">Mi carrito</caption>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <CartTableRow v-for="(product, indexProduct) in productsInCart" :product-item="product"
+                        :key="indexProduct" />
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</template>
+
+<script setup>
+const productsInCart = [
+    {
+        name: 'Flauta melodica shurer 500 gb rigida boquilla',
+        price: 999.99,
+        quantity: 1,
+    },
+    {
+        name: 'Microfono de mano squire inalambrico metal',
+        price: 999.99,
+        quantity: 3,
+    }
+]
+</script>
+
+<style >
+.table_cart {
+    overflow: auto;
+    width: 100%;
+}
+
+.table_cart table {
+    height: 100%;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 1px;
+    text-align: left;
+}
+
+.table_cart caption {
+    caption-side: top;
+    text-align: left;
+}
+
+.table_cart tr {
+    border-top: 1px solid #E1E1E1;
+    border-bottom: 1px solid #E1E1E1;
+}
+
+.table_cart th {
+    background-color: #eceff1;
+}
+
+.table_cart td {
+    background-color: #ffffff;
+}
+
+.table_cart :is(th, td) {
+    color: #000000;
+    padding: 5px 15px;
+}
+
+.table_cart tr :is(th, td):nth-child(n+3) {
+    text-align: center;
+}
+
+.table_cart tr :is(th, td):nth-child(5) {
+    width: 10%;
+}
+</style>
