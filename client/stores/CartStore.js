@@ -19,6 +19,9 @@ export const useCartStore = defineStore("cart", {
     allProducts: (state) => state.productsInCart,
   },
   actions: {
+    addToCart( newProduct ) {  
+        this.productsInCart.push(newProduct)
+    },
     removeFromCart( idToRemove ) {  
         const cartUpdated = this.productsInCart.filter( ({ id }) => id != idToRemove)
         this.productsInCart = [ ...cartUpdated ]
