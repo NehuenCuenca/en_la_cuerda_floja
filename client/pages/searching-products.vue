@@ -33,6 +33,10 @@
 </template>
 
 <script setup>
+useHead({
+  title: 'Buscando productos | En la cuerda floja',
+})
+
 // COMPOSABLES
 const route = useRoute()
 const router = useRouter()

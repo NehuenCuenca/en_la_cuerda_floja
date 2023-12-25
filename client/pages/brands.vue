@@ -8,7 +8,9 @@
 </template>
 
 <script setup>
-
+useHead({
+  title: 'Marcas | En la cuerda floja',
+})
 </script>
 
 <style scoped>

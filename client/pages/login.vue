@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full px-20 flex justify-evenly items-center">
+    <div class="py-10 h-full flex justify-evenly items-center">
         <img class="rounded-3xl" src="../assets/entry-guitar.webp" alt="Entry guitar picture">
 
         <form @submit.prevent="handleFormLogin" id="login-form" class="flex flex-col justify-center items-center gap-y-3">
@@ -23,6 +23,9 @@ export default {
 </script>
 
 <script setup>
+useHead({
+  title: 'Iniciar sesión | En la cuerda floja',
+})
 
 const handleFormLogin = async () => {
     // Basic validation if some fields are empty

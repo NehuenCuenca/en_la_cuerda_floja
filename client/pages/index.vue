@@ -25,6 +25,10 @@
 </template>
 
 <script setup>
+useHead({
+  title: 'Principal | En la cuerda floja',
+})
+
 // STATE
 const token = ref('')
 

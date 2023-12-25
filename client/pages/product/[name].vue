@@ -4,18 +4,16 @@
             src="https://picsum.photos/id/133/1024/350" alt="picsum photo">
         <h1 class="col-start-2 font-semibold text-3xl">Nombre de producto</h1>
         <h3 class="col-start-2 font-semibold text-3xl">$99.99</h3>
-        <div class="col-start-2 w-2/6 flex flex-col gap-y-4">
-            <div class=" rounded-xl shadow-md h-fit p-3 flex justify-around items-center bg-beigeStrong">
-                <button @click="handleQuantity('remove')" class="rounded-sm bg-gray-300 px-2 text-lg font-medium">-</button>
-                <span class="text-xl font-bold">{{quantityOrdered}}</span>
-                <button @click="handleQuantity('add')" class="rounded-sm bg-gray-300 px-2 text-lg font-medium">+</button>
+        <form @submit.prevent="handleSubmit" class="col-start-2 w-2/6 flex flex-col gap-y-4">
+            <div class="rounded-xl shadow-md h-fit p-3 flex justify-around items-center bg-beigeStrong">
+                <button type="button" @click="handleQuantity('remove')" class="rounded-sm bg-gray-300 px-2 text-lg font-medium">-</button>
+                <input type="number" readonly name="quantity" v-model.number="quantityOrdered" class="w-7 text-center text-xl font-bold bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                <button type="button" @click="handleQuantity('add')" class="rounded-sm bg-gray-300 px-2 text-lg font-medium">+</button>
             </div>
-            <form @submit.prevent="handleSubmit" class="w-full ">
-                <button :disabled="quantityNoSpecified" type="submit"
-                    class="transition-colors p-2 rounded-md disabled:bg-gray-400 border-brown-900 bg-beigeStrong text-lg font-semibold shadow-md">Agregar
-                    al carrito</button>
-            </form>
-        </div>
+            <button :disabled="quantityNoSpecified" type="submit"
+                class="transition-colors p-2 rounded-md disabled:bg-gray-400 border-brown-900 bg-beigeStrong text-lg font-semibold shadow-md">Agregar
+                al carrito</button>
+        </form>
 
         <div>
             <h3 class="mb-3 underline font-medium text-gray-600 text-xl">Description</h3>
@@ -38,9 +36,8 @@ const quantityOrdered = ref(0)
 const quantityNoSpecified = computed(() => quantityOrdered.value === 0)
 
 // METHODS
-const handleSubmit = (e) => { 
-    if( quantityNoSpecified.value ){
-        alert('Especifique una cantidad valida (al menos 1 producto)')
+const handleSubmit = (e) => {
+    if(quantityNoSpecified.value) {
         return
     }
 
@@ -51,20 +48,20 @@ const handleSubmit = (e) => {
         price: 1.11,
         quantity: quantityOrdered.value,
     }
-    
+
     store.addToCart(harcodedPoduct)
 }
 
-const handleQuantity = (action) => { 
-      switch (action) {
+const handleQuantity = (action) => {
+    switch (action) {
         case 'add':
-          quantityOrdered.value++; 
-          break;
+            quantityOrdered.value++;
+            break;
         case 'remove':
-          if(quantityOrdered.value > 0)
-          quantityOrdered.value--; 
-          break;
-      }
+            if (quantityOrdered.value > 0)
+                quantityOrdered.value--;
+            break;
+    }
 }
 
 </script>

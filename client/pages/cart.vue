@@ -27,6 +27,9 @@
 </template>
 
 <script setup>
+useHead({
+  title: 'Mi carrito | En la cuerda floja',
+})
 
 import { useCartStore } from '@/stores/CartStore'
 const store = useCartStore()
