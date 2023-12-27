@@ -74,7 +74,7 @@ const hamburguerMenu  = ref(null)
 const navItems = ref([
     {
         emoji: '👤',
-        fn: () => console.log('Send user to the route /user')
+        fn: () => router.push({ name: 'user' })
     },
     {
         emoji: '🛒',
