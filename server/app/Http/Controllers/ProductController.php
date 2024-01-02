@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -13,13 +14,14 @@ class ProductController extends Controller
     {
         $paginateBy = intval($request->input('paginateBy')) ?: 10;
         $paginated  = Product::paginate($paginateBy);
+        
         return response()->json($paginated);
     }
 
     public function getProductsByCategory(Request $request, $category)
     {
         $productsByCategory = Category::where('name', $category)->first()->products->all();
-        dd($productsByCategory);
+
         return response()->json([
             'products' => $productsByCategory
         ]);
@@ -28,7 +30,7 @@ class ProductController extends Controller
     public function getProductsByBrand(Request $request, $brand)
     {
         $productsByBrand = Brand::where('name', $brand)->first()->products->all();
-        dd($productsByBrand);
+
         return response()->json([
             'products' => $productsByBrand
         ]);
@@ -85,6 +87,27 @@ class ProductController extends Controller
         return response()->json([
             'message' => "Filtered products",
             'products' => $filteredProducts,
+        ]);
+    }
+
+    public function getProductById(Request $request, int $id)
+    { 
+        $productFounded = DB::table('products')
+                            ->join('brands', 'products.brand_id', '=', 'brands.id')
+                            ->join('categories', 'products.brand_id', '=', 'categories.id')
+                            ->where('products.id', '=', $id)
+                            ->select('products.id', 'brands.name AS brand', 'categories.name AS category', 'products.name', 'products.price_cost', 'products.description')
+                            ->first(); 
+                             
+        if( !isset($productFounded) ){
+            return response()->json([
+                'message' => "The product with id '$id' can't be found"
+            ], 400);
+        }
+        
+        return response()->json([
+            'message' => "Product founded",
+            'product' => $productFounded
         ]);
     }
 }

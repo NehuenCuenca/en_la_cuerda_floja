@@ -34,3 +34,4 @@ Route::get('/products', [ProductController::class, 'getAllProducts']);
 Route::get('/products/category/{category}', [ProductController::class, 'getProductsByCategory']);
 Route::get('/products/brand/{brand}', [ProductController::class, 'getProductsByBrand']);
 Route::get('/products/filter', [ProductController::class, 'getProductsByFilters']);
+Route::get('/product/{id}', [ProductController::class, 'getProductById']);
