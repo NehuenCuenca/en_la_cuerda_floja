@@ -2,7 +2,7 @@
     <div class="flex flex-col justify-center items-center gap-y-3"  v-if="thereArePoducts">
         <h1 v-if="props.titleList" class="text-3xl underline underline-offset-4 text-center">{{ titleList }}</h1>
         <ul class="w-full flex py-4 flex-wrap justify-around gap-5">
-            <GridProductItem v-for="(product, i) in props.products" :key="i" :name="product.name" :price="product.price_cost"/>
+            <GridProductItem v-for="(product, i) in props.products" :key="i" :product_info="product"/>
         </ul>
     </div>
 

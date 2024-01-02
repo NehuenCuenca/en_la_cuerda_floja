@@ -35,6 +35,14 @@ const quantityOrdered = ref(0)
 // COMPUTED
 const quantityNoSpecified = computed(() => quantityOrdered.value === 0)
 
+// COMPOSABLES
+const route = useRoute()
+
+// LIFECYCLE HOOKS
+onMounted(() => {
+    console.log( {route});
+})
+
 // METHODS
 const handleSubmit = (e) => {
     if(quantityNoSpecified.value) {
