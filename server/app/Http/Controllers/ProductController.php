@@ -38,13 +38,14 @@ class ProductController extends Controller
 
     public function getProductsByFilters(Request $request)
     {
-        $filtersFromUrl = $request->collect()->all();
+        $filtersFromUrl = $request->except(['paginateBy', 'page']); 
+        $paginateBy = intval($request->input('paginateBy')) ?: 10;
 
         // CHECK IF THERE ARE FILTERS ON THE URL
         if (empty($filtersFromUrl)) {
             return response()->json([
                 'message' => "Send at least one filter (brand or category) on the query params. Returned all products",
-                "products" => Product::all()
+                "products" => Product::paginate($paginateBy)
             ]);
         }
 
@@ -78,11 +79,11 @@ class ProductController extends Controller
         if( empty($sanitizedFilters) ){
             return response()->json([
                 'message' => "Filters specified may not exist or can't be applied. Returned all products",
-                'products' => Product::all(),
+                'products' => Product::paginate($paginateBy),
             ]);
-        }
-
-        $filteredProducts = Product::where($sanitizedFilters)->get();
+        } 
+        
+        $filteredProducts = Product::where($sanitizedFilters)->paginate($paginateBy);
 
         return response()->json([
             'message' => "Filtered products",
