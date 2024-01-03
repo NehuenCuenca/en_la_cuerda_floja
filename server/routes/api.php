@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserAuthController;
@@ -35,3 +37,9 @@ Route::get('/products/category/{category}', [ProductController::class, 'getProdu
 Route::get('/products/brand/{brand}', [ProductController::class, 'getProductsByBrand']);
 Route::get('/products/filter', [ProductController::class, 'getProductsByFilters']);
 Route::get('/product/{id}', [ProductController::class, 'getProductById']);
+
+// BRANDS
+Route::get('/brands', [BrandController::class, 'getAllBrands']);
+
+// Category
+Route::get('/categories', [CategoryController::class, 'getAllCategories']);
