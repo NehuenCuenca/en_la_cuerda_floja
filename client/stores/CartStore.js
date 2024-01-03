@@ -20,7 +20,14 @@ export const useCartStore = defineStore("cart", {
   },
   actions: {
     addToCart( newProduct ) {  
-        this.productsInCart.push(newProduct)
+      const alreadyInCart = this.productsInCart.find(({id}) => newProduct.id === id)
+      
+      if(alreadyInCart){
+        alreadyInCart.quantity = alreadyInCart.quantity + newProduct.quantity;
+        return
+      }
+
+      this.productsInCart.push(newProduct)
     },
     removeFromCart( idToRemove ) {  
         const cartUpdated = this.productsInCart.filter( ({ id }) => id != idToRemove)
