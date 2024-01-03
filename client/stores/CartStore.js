@@ -4,13 +4,13 @@ export const useCartStore = defineStore("cart", {
       {
         id: 'abc',
         name: "Flauta melodica shurer 500 gb rigida boquilla",
-        price: 999.99,
+        price_cost: 999.99,
         quantity: 1,
       },
       {
         id: 'xyz',
         name: "Microfono de mano squire inalambrico metal",
-        price: 999.99,
+        price_cost: 999.99,
         quantity: 3,
       },
     ],

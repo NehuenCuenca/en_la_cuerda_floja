@@ -1,7 +1,7 @@
 <template>
     <tr>
         <td>{{ props.productItem.name }}</td>
-        <td>${{ props.productItem.price }}</td>
+        <td>${{ props.productItem.price_cost }}</td>
         <td>
             <div class="px-20 flex items-center justify-evenly">
                 <button type="button" class="font-semibold text-2xl"
@@ -30,7 +30,7 @@ const props = defineProps({
 
 // COMPUTED
 const totalPrice = computed(() => {
-    return (props.productItem.price * props.productItem.quantity).toFixed(2)
+    return (props.productItem.price_cost * props.productItem.quantity).toFixed(2)
 })
 
 // METHODS
