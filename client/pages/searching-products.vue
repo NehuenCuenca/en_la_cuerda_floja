@@ -13,20 +13,15 @@
                 @updateFilters="handleUpdateFilters" />
         </form>
 
-        <GridProductsList :quantityItems="9" class="col-span-3 row-span-3" />
+        <h1 v-if="loadingProducts" class="col-span-3 row-span-3 text-xl font-semibold">Filtrando productos...</h1>
+        <template v-else>
+            <h1 v-if="haveNoneFilters || haveNoneProductsFiltered" class="col-span-3 row-span-3 text-xl font-semibold">No hay productos de acuerdo a esos filtros 😵</h1>
+            <GridProductsList v-else :products="filteredProducts" class="col-span-3 row-span-3" />
+        </template>
 
-        <ul class="px-3 col-span-1 row-span-1 bg-gray-600 h-10 w-min flex gap-4 items-center">
-            <li class="h-full text-center text-xl font-semibold hover:bg-gray-400 transition-colors">
-                <button class="h-full px-3" @click="handleProductsListPage">1</button>
-            </li>
-            <li class="h-full text-center text-xl font-semibold hover:bg-gray-400 transition-colors">
-                <button class="h-full px-3" @click="handleProductsListPage">2</button>
-            </li>
-            <li class="h-full text-center text-xl font-semibold hover:bg-gray-400 transition-colors">
-                <button class="h-full px-3" @click="handleProductsListPage">3</button>
-            </li>
-            <li class="h-full text-center text-xl font-semibold hover:bg-gray-400 transition-colors">
-                <button class="h-full px-3" @click="handleProductsListPage">...</button>
+        <ul v-if="lastPage > 0 && !haveNoneProductsFiltered" class="px-3 col-span-1 row-span-1 bg-gray-600 h-10 w-min flex gap-4 items-center self-end">
+            <li v-for="(page, indexPage) in lastPage" :key="indexPage" :class="(page === currentPage) ? 'bg-gray-400':''" class="h-full text-center text-xl font-semibold hover:bg-gray-400 transition-colors">
+                <button class="h-full px-3" @click="handleProductsListPage">{{page}}</button>
             </li>
         </ul>
     </div>
@@ -43,7 +38,7 @@ const router = useRouter()
 
 // STATE
 const filters = ref({
-    ...route.query,
+    ...router.currentRoute.value.query,
 })
 
 const staticFilters = ref({
@@ -58,18 +53,57 @@ const staticFilters = ref({
     ]
 })
 
+const filteredProducts = ref([])
+const loadingProducts  = ref(true)
+const currentPage = ref(Number(route.query.page) || 1)
+const lastPage = ref(0)
+
+// LIFECYCLE HOOKS
+onMounted(async() => {
+    filteredProducts.value = await getFilteredProducts()
+})
+
+
 // COMPUTED
-const productName = computed(() => route.query.productToSearch)
+const productName = computed(() => route.query.productToSearch || '')
+const haveNoneFilters = computed(() => Object.keys(route.query).length === 0 )
+const haveNoneProductsFiltered = computed(() => filteredProducts.value.length === 0 )
+
 
 // WATCHERS
-watch(router.currentRoute, (newRoute, oldRoute) => {
+watch(router.currentRoute, async(newRoute, oldRoute) => {
     filters.value = {
         ...newRoute.query,
-        page: 1,
     }
+    
+    filteredProducts.value = await getFilteredProducts()
 })
 
 // METHODS
+const getFilteredProducts = async() => { 
+    const urlAPIProducts = `http://127.0.0.1:8000/api/products/filter`
+    const { data, pending, error } = await useFetch(urlAPIProducts, {
+        query: {
+            ...filters.value
+        }
+    })
+    console.log(data.value);
+    loadingProducts.value = pending.value
+    
+    if( error.value ){
+        console.log('Error al traer las productos filtrados: ', error.value.message);
+        return []
+    }
+
+    if( !data.value ){
+        return getFilteredProducts(); 
+    }
+    
+    currentPage.value = data.value.products.current_page
+    lastPage.value = data.value.products.last_page
+    return data.value.products.data
+}
+
 const handleUpdateFilters = (newFilter) => {
     // update filters
     filters.value = {
@@ -89,10 +123,12 @@ const handleUpdateFilters = (newFilter) => {
 
 const handleProductsListPage = (e) => {
     let pageValue = Number(e.target.textContent)
+
     if (isNaN(pageValue)) {
-        console.log('last page');
-        pageValue = 100 //When backend has pagination change this harcoded value to last page
+        pageValue = lastPage.value
     }
+
+    currentPage.value = pageValue
 
     router.push({
         path: `/searching-products`,
