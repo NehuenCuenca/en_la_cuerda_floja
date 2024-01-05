@@ -3,7 +3,8 @@
         <Carousel />
         <hr>
         <div class="bg-beigeStrong p-10">
-            <GridProductsList :products="productsList1" />
+            <h2 v-if="productsList1.length === 0" class="text-center font-semibold text-lg underline underline-offset-4">No ha sido posible solicitar los productos ☹</h2>
+            <GridProductsList v-else :products="productsList1" />
         </div>
         <hr>
         <div class="bg-beige text-black py-10 flex flex-col items-center justify-center gap-6">
@@ -18,7 +19,8 @@
         </ul>
         <hr>
         <div class="bg-beigeStrong p-10">
-            <GridProductsList :title-list="'Otros productos interesantisimos!'" :products="productsList2" />
+            <h2 v-if="productsList2.length === 0" class="text-center font-semibold text-lg underline underline-offset-4">No ha sido posible solicitar los productos ☹</h2>
+            <GridProductsList v-else :products="productsList2" :title-list="'Otros productos interesantisimos!'" />
         </div>
         <hr>
     </div>
@@ -48,7 +50,6 @@ onMounted(async () => {
     productsList1.value = await getProducts()
     productsList2.value = await getProducts(8, 2)
 })
-
 
 const getProducts = async (paginateBy = 8, page = 1) => {
     const urlAPI = 'http://127.0.0.1:8000/api/products'
