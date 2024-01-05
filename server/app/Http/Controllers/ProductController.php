@@ -38,21 +38,13 @@ class ProductController extends Controller
 
     public function getProductsByFilters(Request $request)
     {
-        $filtersFromUrl = $request->except(['paginateBy', 'page']); 
+        $filtersFromUrl = $request->except(['paginateBy', 'page', 'productToSearch']); 
         $paginateBy = intval($request->input('paginateBy')) ?: 10;
-
-        // CHECK IF THERE ARE FILTERS ON THE URL
-        if (empty($filtersFromUrl)) {
-            return response()->json([
-                'message' => "Send at least one filter (brand or category) on the query params. Returned all products",
-                "products" => Product::paginate($paginateBy)
-            ]);
-        }
 
         $brandFounded = null;
         $categoryFounded = null;
 
-        // CHEACK IF THE FILTERS EXISTS AND ARE VALIDS
+        // CHECK IF BRAND AND CATEGORY FILTERS EXISTS AND ARE VALIDS
         if (isset($filtersFromUrl['brand'])) {
             $brandFounded = Brand::where('name', $filtersFromUrl['brand'])->first();
         }
@@ -75,14 +67,19 @@ class ProductController extends Controller
             )
         );
 
+        // IF FILTER productToSearch EXIST, ADD TO sanitizedFilters
+        $productToSearch = $request->input('productToSearch');
+        if( isset($productToSearch) ){
+            array_push($sanitizedFilters, ['name', 'like', '%'.$productToSearch.'%']);
+        } 
+
         // If the filters after the sanitize are empty...
         if( empty($sanitizedFilters) ){
             return response()->json([
-                'message' => "Filters specified may not exist or can't be applied. Returned all products",
-                'products' => Product::paginate($paginateBy),
-            ]);
+                'message' => "Filters specified may not exist or can't be applied.",
+            ], 400);
         } 
-        
+       
         $filteredProducts = Product::where($sanitizedFilters)->paginate($paginateBy);
 
         return response()->json([
