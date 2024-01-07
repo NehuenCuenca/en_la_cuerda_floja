@@ -1,5 +1,7 @@
 <template>
-    <li :class="rowStart + ' ' + colStart" class="bg-greyCard py-10 px-4 rounded">Brand {{ props.indexItem }}</li>
+    <li class="h-20 bg-greyCard rounded " :class="rowStart + ' ' + colStart" >
+        <NuxtLink class="w-full h-full grid place-items-center" :to="{ name: 'searching-products', query: { brand: brandItem.name } }">{{ brandItem.name }}</NuxtLink>
+    </li>
 </template>
 
 <script setup>

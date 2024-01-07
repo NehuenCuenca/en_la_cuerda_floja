@@ -7,8 +7,9 @@
             <GridProductsList v-else :products="productsList1" />
         </div>
         <hr>
-        <div class="bg-beige text-black py-10 flex flex-col items-center justify-center gap-6">
-            <GridBrandsList />
+        <div class="bg-beige text-black py-10 px-5 flex flex-col items-center justify-center gap-6">
+            <h2 v-if="brands.length === 0" class="text-center font-semibold text-lg underline underline-offset-4">No ha sido posible solicitar las marcas ☹</h2>
+            <GridBrandsList v-else :brands="brands"/>
         </div>
         <hr>
         <Carousel />
@@ -35,6 +36,8 @@ useHead({
 const token = ref('')
 const productsList1 = ref([])
 const productsList2 = ref([])
+const brands = ref([])
+
 
 // DOM state
 const caracteristics = ref([
@@ -49,6 +52,7 @@ onMounted(async () => {
     await getUserInfo(token.value)
     productsList1.value = await getProducts()
     productsList2.value = await getProducts(8, 2)
+    brands.value = await getBrands()
 })
 
 const getProducts = async (paginateBy = 8, page = 1) => {
@@ -65,6 +69,22 @@ const getProducts = async (paginateBy = 8, page = 1) => {
         return []
     }
     
+    return data.value.data
+}
+
+const getBrands = async () => {
+    const urlAPIBrands = `http://127.0.0.1:8000/api/brands`
+    const { data, pending, error } = await useFetch(urlAPIBrands)
+
+    if (error.value) {
+        console.log('Error al traer las marcas: ', error.value.message);
+        return []
+    }
+
+    if (!data.value) {
+        return getBrands();
+    }
+
     return data.value.data
 }
 
