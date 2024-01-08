@@ -1,6 +1,6 @@
 <template>
     <li >
-        <button class="text-xl" @click="navItem.fn">{{navItem.emoji}}</button>
+        <button class="text-2xl" @click="navItem.fn">{{navItem.emoji}}</button>
     </li>
 </template>
 

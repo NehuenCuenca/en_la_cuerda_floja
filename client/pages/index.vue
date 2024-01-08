@@ -41,9 +41,9 @@ const brands = ref([])
 
 // DOM state
 const caracteristics = ref([
-    { icon: '😎', title: 'Caracteristic title..', },
-    { icon: '😋', title: 'Caracteristic title..', },
-    { icon: '😍', title: 'Caracteristic title..', },
+    { icon: '🏠', title: 'Checkeá la guitarra', shortText: 'Pasá por el local para probarla' },
+    { icon: '🆙', title: 'Hacemos que suene mejor', shortText: 'Calibracion y afinacion antes de la compra' },
+    { icon: '👷‍♂️', title: 'Tambien arreglamos', shortText: 'bajos, charangos, y muchos mas' }
 ])
 
 // LIFECYCLE HOOKS
