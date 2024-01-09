@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserAuthController;
@@ -41,5 +42,8 @@ Route::get('/product/{id}', [ProductController::class, 'getProductById']);
 // BRANDS
 Route::get('/brands', [BrandController::class, 'getAllBrands']);
 
-// Category
+// CATEGORIES
 Route::get('/categories', [CategoryController::class, 'getAllCategories']);
+
+// ORDERS
+Route::post('/orders', [OrderController::class, 'createNewOrder'])->middleware('auth:sanctum');
