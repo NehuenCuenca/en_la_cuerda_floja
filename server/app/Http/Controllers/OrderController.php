@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -28,12 +30,26 @@ class OrderController extends Controller
             'total_price' => $totalPriceOfCart,
         ]);
 
-        // Associate the products to an order
-        collect($cart)->each(function ($product) use ($newOrder) {
-            $newOrder->products()->attach($product['id'], ['quantity' => $product['quantity']]);
-        });
+        // Create an OrderProduct record for each product in $cart
+        foreach ($cart as $product) {
+            $priceByQuantity = Product::where('id', $product['id'])->first()->price_cost * $product['quantity'];
 
-        $newOrder->products->all();
+            OrderProduct::create([
+                'order_id' => $newOrder->id,
+                'product_id' => $product['id'],
+                'quantity' => $product['quantity'],
+                'price' => $priceByQuantity,
+            ]);
+        }
+
+        // Get the order_product_id, name, quantity and price of the products that belongs to an order
+        $ordersProducts = DB::table('order_products')
+                ->join('products', 'products.id', '=', 'order_products.product_id')
+                ->where('order_products.order_id', '=', $newOrder->id)
+                ->select('order_products.id AS order_product_id', 'products.name AS product', 'order_products.quantity', 'order_products.price')
+                ->get()->all();
+
+        $newOrder->products = $ordersProducts;
         
         return response()->json([
             "message" => "The order was succesfull",
