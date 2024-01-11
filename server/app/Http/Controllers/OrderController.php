@@ -5,11 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Services\MercadoPagoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
+    public function __construct(
+        private MercadoPagoService $mercadoPagoService
+    ) {}
+    
     public function createNewOrder(Request $request)
     {
         $cart = $request->input('cart');
@@ -38,7 +44,7 @@ class OrderController extends Controller
                 'order_id' => $newOrder->id,
                 'product_id' => $product['id'],
                 'quantity' => $product['quantity'],
-                'price' => $priceByQuantity,
+                'price' => round($priceByQuantity, 2),
             ]);
         }
 
@@ -46,13 +52,17 @@ class OrderController extends Controller
         $ordersProducts = DB::table('order_products')
                 ->join('products', 'products.id', '=', 'order_products.product_id')
                 ->where('order_products.order_id', '=', $newOrder->id)
-                ->select('order_products.id AS order_product_id', 'products.name AS product', 'order_products.quantity', 'order_products.price')
+                ->select('order_products.id AS order_product_id', 'products.name AS product', 'order_products.quantity','products.price_cost AS unit_price',  'order_products.price AS price_by_quantity')
                 ->get()->all();
 
         $newOrder->products = $ordersProducts;
         
+        // integrating mercado pago service 
+        $preference = $this->mercadoPagoService->createPreference($newOrder);
+        
         return response()->json([
             "message" => "The order was succesfull",
+            'init_point' => $preference->init_point,
             "order" => $newOrder,
         ]);
     }
@@ -78,7 +88,8 @@ class OrderController extends Controller
     public function calculateTotalPriceCart(Array $products){
         return array_reduce($products, function ($acc, $product) {
             $productFromDB = Product::where('id', $product['id'])->first();
-            return $acc + ($productFromDB->price_cost * $product['quantity']);
+            $acc += ($productFromDB->price_cost * $product['quantity']);
+            return round($acc, 2);
         }, 0);
     }
 }
