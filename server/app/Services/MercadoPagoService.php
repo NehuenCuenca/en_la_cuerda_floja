@@ -21,11 +21,11 @@ class MercadoPagoService
             $item = new Item();
 
             $item->title = $product->product;
-            $item->quantity = $product->quantity;
-            $item->unit_price = $product->unit_price;
+            $item->quantity = $product->pivot->quantity;
+            $item->unit_price = $product->price_cost;
 
             return $item;
-        }, $order->products);
+        }, $order->products->all());
 
         $preference->items = $items;
         $preference->external_reference = $order->id;

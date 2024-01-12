@@ -48,14 +48,8 @@ class OrderController extends Controller
             ]);
         }
 
-        // Get the order_product_id, name, quantity and price of the products that belongs to an order
-        $ordersProducts = DB::table('order_products')
-                ->join('products', 'products.id', '=', 'order_products.product_id')
-                ->where('order_products.order_id', '=', $newOrder->id)
-                ->select('order_products.id AS order_product_id', 'products.name AS product', 'order_products.quantity','products.price_cost AS unit_price',  'order_products.price AS price_by_quantity')
-                ->get()->all();
-
-        $newOrder->products = $ordersProducts;
+        // add the relations of the products to the instance
+        $newOrder->products;
         
         // integrating mercado pago service 
         $preference = $this->mercadoPagoService->createPreference($newOrder);
