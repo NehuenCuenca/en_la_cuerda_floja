@@ -9,7 +9,7 @@
             <ProductsFiltersList :filterTag="'category'" :filterTitle="'Categoria'" :filters="staticFilters.category"
                 @updateFilters="handleUpdateFilters" />
 
-            <ProductsFiltersList :filterTag="'state'" :filterTitle="'Estado'" :filters="staticFilters.state"
+            <ProductsFiltersList :filterTag="'brand'" :filterTitle="'Marca'" :filters="staticFilters.brand"
                 @updateFilters="handleUpdateFilters" />
         </form>
 
@@ -28,6 +28,8 @@
 </template>
 
 <script setup>
+import { useCallsApi } from '~/composables/useCallsAPI';
+
 useHead({
   title: 'Buscando productos | En la cuerda floja',
 })
@@ -35,6 +37,7 @@ useHead({
 // COMPOSABLES
 const route = useRoute()
 const router = useRouter()
+const { getCollection } = useCallsApi()
 
 // STATE
 const filters = ref({
@@ -42,15 +45,8 @@ const filters = ref({
 })
 
 const staticFilters = ref({
-    category: [
-        { name: 'Categoria 1' },
-        { name: 'Categoria 2' },
-        { name: 'Categoria 3' },
-    ],
-    state: [
-        { name: 'Nuevo' },
-        { name: 'Usado' },
-    ]
+    category: [],
+    state: []
 })
 
 const filteredProducts = ref([])
@@ -61,6 +57,8 @@ const lastPage = ref(0)
 // LIFECYCLE HOOKS
 onMounted(async() => {
     filteredProducts.value = await getFilteredProducts()
+    staticFilters.value.category = await getCollection('categories')
+    staticFilters.value.brand = await getCollection('brands')
 })
 
 
@@ -108,7 +106,8 @@ const handleUpdateFilters = (newFilter) => {
     // update filters
     filters.value = {
         ...filters.value,
-        ...newFilter
+        ...newFilter,
+        page: 1,
     }
 
     // update the url
