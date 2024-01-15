@@ -27,9 +27,11 @@ const router = useRouter()
 
 // COMPUTED
 const filterIsOnUrlQuery = computed(() => {
-    const urlHasStateFilter = router.currentRoute.value.query.hasOwnProperty(props.filterTag)
-    const urlHasActualFilterName = props.filterItem.name === router.currentRoute.value.query[props.filterTag]
-    return urlHasStateFilter && urlHasActualFilterName
+    const { query } = router.currentRoute.value
+    const urlHasTagFilter = query.hasOwnProperty(props.filterTag)
+    const urlHasFilterName = props.filterItem.name === query[props.filterTag]
+
+    return urlHasTagFilter && urlHasFilterName
         ? 'font-semibold'
         : ''
 })
