@@ -19,9 +19,8 @@
                     </tbody>
                 </table>
             </div>
-            <form @submit.prevent class="flex flex-col w-1/4">
-                <button type="submit"
-                    class="px-5 py-2 text-2xl text-center bg-emerald-700 text-white border-none ">Finalizar
+            <form @submit.prevent="handleSubmit" class="flex flex-col w-1/4">
+                <button type="submit" class="px-5 py-2 text-2xl text-center bg-emerald-700 text-white border-none ">Realizar
                     compra</button>
                 <NuxtLink to="/"
                     class="px-5 py-2 text-2xl text-center bg-white text-gray-600 border-2 border-text-gray-600 ">
@@ -30,7 +29,10 @@
         </div>
         <div class="flex flex-col items-center gap-4" v-else>
             <i class="text-6xl not-italic">😶</i>
-            <h1 class="text-2xl">¡No tienes productos en tu carrito!</h1>
+            <h1 class="text-2xl font-semibold">¡No tienes productos en tu carrito!</h1>
+            <p>Buscalo por nombre con la <span class="font-medium text-gray-50">caja de arriba</span> o <NuxtLink to="/"
+                    class="font-medium underline">chusmea la pagina principal</NuxtLink>
+            </p>
         </div>
     </div>
 </template>
@@ -40,8 +42,14 @@ useHead({
     title: 'Mi carrito | En la cuerda floja',
 })
 
+// STORE
 import { useCartStore } from '@/stores/CartStore'
 const store = useCartStore()
+
+// METHODS
+const handleSubmit = async () => {
+    await store.generateOrder()
+}
 </script>
 
 <style >

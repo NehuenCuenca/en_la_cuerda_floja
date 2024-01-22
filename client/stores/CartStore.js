@@ -40,6 +40,28 @@ export const useCartStore = defineStore("cart", {
           productToUpdate.quantity--; 
           break;
       }
-    }
+    },
+
+    async generateOrder() {
+      const token = localStorage.getItem('en_la_cuerda_floja_token')
+      const { data, error, refresh } = await useFetch("http://127.0.0.1:8000/api/orders", {
+        method: "POST",
+        body: JSON.stringify({
+          cart: this.allProducts
+        }),
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': "application/json",
+        },
+      });
+
+      if(error.value){
+        alert("Error: " + error.value.data.message);
+        return
+      }
+      
+      const { init_point } = data.value
+      window.open(init_point, 'blank')
+    },
   },
 });
