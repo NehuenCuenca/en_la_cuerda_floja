@@ -1,21 +1,26 @@
 export function useCallsApi() {
-    
-    // METHODS
     const getCollection = async (collectionName) => {
-        const collectionAPIEndpoint = `http://127.0.0.1:8000/api/${collectionName}`
-        const { data, error } = await useFetch(collectionAPIEndpoint)
-    
-        if (error.value) {
-            console.log(`Error al traer la coleccion ${collectionName}: `, error.value.message);
+        try {
+            const retry = 5
+            const retryDelay = 10_000 // ms
+            const response = await $fetch(`/api/${collectionName}`, {
+                baseURL: 'http://127.0.0.1:8000',
+                method: 'GET',
+                async onRequestError({ request, options, error }) {
+                    console.error(`${error.message} | Reintentando de nuevo en ${retryDelay/1_000} segundos`);
+                },
+                retryStatusCodes: [ 500, 502, 503, 504 ], 
+                retry,
+                retryDelay
+            })
+            
+            return response.data
+        } catch (error) {
+            console.error(`${error.message} | Error al tratar de solicitar la coleccion ${collectionName} despues de varios intentos...`);
             return []
         }
-    
-        if (!data.value) {
-            return getCollection(collectionName);
-        }
-        
-        return data.value.data
     }
+
 
     return { getCollection }
 }

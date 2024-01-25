@@ -30,7 +30,7 @@
         <div class="flex flex-col items-center gap-4" v-else>
             <i class="text-6xl not-italic">😶</i>
             <h1 class="text-2xl font-semibold">¡No tienes productos en tu carrito!</h1>
-            <p>Buscalo por nombre con la <span class="font-medium text-gray-50">caja de arriba</span> o <NuxtLink to="/"
+            <p>Buscalo por nombre con la <span class="font-medium">caja de arriba</span> o <NuxtLink to="/"
                     class="font-medium underline">chusmea la pagina principal</NuxtLink>
             </p>
         </div>
