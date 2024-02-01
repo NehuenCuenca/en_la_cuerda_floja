@@ -82,10 +82,7 @@ class ProductController extends Controller
        
         $filteredProducts = Product::where($sanitizedFilters)->paginate($paginateBy);
 
-        return response()->json([
-            'message' => "Filtered products",
-            'products' => $filteredProducts,
-        ]);
+        return response()->json( $filteredProducts );
     }
 
     public function getProductById(Request $request, int $id)

@@ -1,11 +1,18 @@
 export function useCallsApi() {
-    const getCollection = async (collectionName) => {
+    const isLoading = ref(true);
+
+    const getDataFromAPI = async (fetchSettings) => {
+        const { endpoint, querySearchParams } = fetchSettings
+
         try {
-            const retry = 5
+            isLoading.value = true;
+            const retry = 3
             const retryDelay = 10_000 // ms
-            const response = await $fetch(`/api/${collectionName}`, {
-                baseURL: 'http://127.0.0.1:8000',
+
+            const response = await $fetch(`/${endpoint}`, {
                 method: 'GET',
+                baseURL: 'http://127.0.0.1:8000/api',
+                query: querySearchParams,
                 async onRequestError({ request, options, error }) {
                     console.error(`${error.message} | Reintentando de nuevo en ${retryDelay/1_000} segundos`);
                 },
@@ -14,14 +21,16 @@ export function useCallsApi() {
                 retryDelay
             })
             
-            return response.data
+            isLoading.value = false;
+            return response
         } catch (error) {
-            console.error(`${error.message} | Error al tratar de solicitar la coleccion ${collectionName} despues de varios intentos...`);
-            return []
+            isLoading.value = false;
+            console.error(`${error.message} | Error al tratar de solicitar la data del endpoint ${endpoint} despues de varios intentos...`);
+            return { data: [], last_page: 0, current_page: 0 }
         }
     }
 
 
-    return { getCollection }
+    return { isLoading, getDataFromAPI }
 }
 
