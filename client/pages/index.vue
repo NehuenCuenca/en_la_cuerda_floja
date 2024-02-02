@@ -4,7 +4,7 @@
         <hr>
         <div class="bg-beigeStrong p-10">
             <h2 v-if="productsList1.length === 0" class="text-center font-semibold text-lg underline underline-offset-4">No ha sido posible solicitar los productos ☹</h2>
-            <GridProductsList v-else :products="productsList1" />
+            <GridProductsList v-else :products="productsList1" :containerClassStyles="['justify-start', 'items-center']" />
         </div>
         <hr>
         <div class="bg-beige text-black py-10 px-5 flex flex-col items-center justify-center gap-6">
@@ -21,7 +21,7 @@
         <hr>
         <div class="bg-beigeStrong p-10">
             <h2 v-if="productsList2.length === 0" class="text-center font-semibold text-lg underline underline-offset-4">No ha sido posible solicitar los productos ☹</h2>
-            <GridProductsList v-else :products="productsList2" :title-list="'Otros productos interesantisimos!'" />
+            <GridProductsList v-else :containerClassStyles="['justify-start', 'items-center']" :products="productsList2" :title-list="'Otros productos interesantisimos!'" />
         </div>
         <hr>
     </div>

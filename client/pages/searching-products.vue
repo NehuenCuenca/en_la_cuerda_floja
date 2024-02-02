@@ -17,7 +17,7 @@
         <h1 v-if="isLoadingProducts" class="col-span-3 row-span-3 text-xl font-semibold">Filtrando productos...</h1>
         <template v-else>
             <h1 v-if="!isApplyingFilters || !haveProductsFiltered" class="col-span-3 row-span-3 text-xl font-semibold">No hay productos de acuerdo a esos filtros 😵</h1>
-            <GridProductsList v-else :products="filteredProducts" class="col-span-3 row-span-3" />
+            <GridProductsList v-else :products="filteredProducts" :containerClassStyles="['justify-start', 'items-start']" class="col-span-3 row-span-3" />
         </template>
 
         <ul v-if="lastPage > 0 && haveProductsFiltered" class="px-3 col-span-1 row-span-1 bg-gray-600 h-10 w-min flex gap-4 items-center self-end">
