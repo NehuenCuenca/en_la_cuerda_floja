@@ -80,9 +80,14 @@ class ProductController extends Controller
             ], 400);
         } 
        
-        $filteredProducts = Product::where($sanitizedFilters)->paginate($paginateBy);
+        $filteredProducts = Product::where($sanitizedFilters);
+        if( empty($filteredProducts->get()->all()) ){
+            return response()->json([
+                'message' => 'There are no products that apply to these filters'
+            ], 400);
+        }
 
-        return response()->json( $filteredProducts );
+        return response()->json( $filteredProducts->paginate($paginateBy) );
     }
 
     public function getProductById(Request $request, int $id)
