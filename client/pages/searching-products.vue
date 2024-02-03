@@ -38,8 +38,8 @@ useHead({
 // COMPOSABLES
 const route = useRoute()
 const router = useRouter()
-const { getDataFromAPI: getProducts, isLoading: isLoadingProducts } = useCallsApi()
-const { getDataFromAPI: getFilters, isLoading: isLoadingFilters }  = useCallsApi()
+const { getDataFromAPI: getProducts, isLoading: isLoadingProducts, gotError:gotErrorFetchingProducts } = useCallsApi()
+const { getDataFromAPI: getFilters, isLoading: isLoadingFilters, gotError:gotErrorFetchingFilters }  = useCallsApi()
 
 
 // STATE
@@ -59,15 +59,8 @@ const lastPage = ref(0)
 
 // LIFECYCLE HOOKS
 onMounted( async() => {
-    const { data: products, current_page, last_page } = await getProducts({ endpoint: 'products/filter', querySearchParams: { ...filters.value, paginateBy: paginateBy.value } })
-    filteredProducts.value = products
-    currentPage.value = current_page
-    lastPage.value = last_page
-
-    const { data: categories } = await getFilters({ endpoint: 'categories' })
-    staticFilters.value.category = categories
-    const { data: brands } = await getFilters({ endpoint: 'brands' })
-    staticFilters.value.brand = brands
+    await tryGetProducts()
+    await tryGetFilters()
 })
 
 
@@ -83,13 +76,48 @@ watch(router.currentRoute, async(newRoute, oldRoute) => {
         ...newRoute.query,
     }
     
-    const { data, current_page, last_page } = await getProducts({ endpoint: 'products/filter', querySearchParams: { ...filters.value, paginateBy: paginateBy.value } })
-    filteredProducts.value = data
-    currentPage.value = current_page
-    lastPage.value = last_page
+    await tryGetProducts()
 })
 
 // METHODS
+const tryGetProducts = async() => { 
+    const response = await getProducts({ endpoint: 'products/filter', querySearchParams: { ...filters.value, paginateBy: paginateBy.value } })
+
+    if( gotErrorFetchingProducts([response]) ){
+        const error = response;
+        console.error(error.message);
+        filteredProducts.value = []
+        currentPage.value = 0
+        lastPage.value = 0
+    } else { 
+        const { data: products, current_page, last_page } = response
+        filteredProducts.value = products
+        currentPage.value = current_page
+        lastPage.value = last_page
+    }
+}
+
+const tryGetFilters = async() => { 
+    const responses = await Promise.all([
+        await getFilters({ endpoint: 'categories' }),
+        await getFilters({ endpoint: 'brands' })
+    ])
+
+    if( gotErrorFetchingFilters(responses) ){
+        const errors = responses;
+        errors.forEach(error => {
+            console.error(error.message);
+        });
+
+        staticFilters.value.category = []
+        staticFilters.value.brand = []
+    } else { 
+        const [categoriesResponse, brandsResponse] = responses
+        staticFilters.value.category = categoriesResponse.data
+        staticFilters.value.brand = brandsResponse.data
+    }
+ }
+
 const handleUpdateFilters = (newFilter) => {
     // console.info('handleUpdateFilters: added a new filter')
     // update filters

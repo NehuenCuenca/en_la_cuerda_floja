@@ -14,7 +14,7 @@ export function useCallsApi() {
                 baseURL: 'http://127.0.0.1:8000/api',
                 query: querySearchParams,
                 async onRequestError({ request, options, error }) {
-                    console.error(`${error.message} | Reintentando de nuevo en ${retryDelay/1_000} segundos`);
+                    console.error(`${error.message} | Retry on ${retryDelay/1_000} seconds`);
                 },
                 retryStatusCodes: [ 500, 502, 503, 504 ], 
                 retry,
@@ -25,12 +25,16 @@ export function useCallsApi() {
             return response
         } catch (error) {
             isLoading.value = false;
-            console.error(`${error.message} | Error al tratar de solicitar la data del endpoint ${endpoint} despues de varios intentos...`);
-            return { data: [], last_page: 0, current_page: 0 }
+            const messageFromBackend = (error.data) 
+                                    ? error.data.message 
+                                    : `Error when trying to request data from endpoint ${endpoint} after several attempts... Server not available`
+
+            return new Error(`${error.name} | ${error.message} | ${messageFromBackend}`)
         }
     }
 
+    const gotError = (responses) => responses.some( response => response instanceof Error )
 
-    return { isLoading, getDataFromAPI }
+    return { isLoading, getDataFromAPI, gotError }
 }
 
