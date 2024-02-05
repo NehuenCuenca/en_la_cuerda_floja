@@ -8,6 +8,8 @@ export function useCallsApi() {
             isLoading.value = true;
             const retry = 3
             const retryDelay = 10_000 // ms
+            // const retry = 1
+            // const retryDelay = 2_000 // ms
 
             const response = await $fetch(`/${endpoint}`, {
                 method: 'GET',

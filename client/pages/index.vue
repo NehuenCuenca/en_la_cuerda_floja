@@ -3,13 +3,19 @@
         <Carousel />
         <hr>
         <div class="bg-beigeStrong p-10">
-            <h2 v-if="productsList1.length === 0" class="text-center font-semibold text-lg underline underline-offset-4">No ha sido posible solicitar los productos ☹</h2>
-            <GridProductsList v-else :products="productsList1" :containerClassStyles="['justify-start', 'items-center']" />
+            <h2 v-if="isLoadingProducts" class="text-center font-semibold text-lg underline underline-offset-4">Estamos cargando los productos...</h2>
+            <template v-else>
+                <h2 v-if="productsList1.length === 0" class="text-center font-semibold text-lg underline underline-offset-4">No ha sido posible solicitar los productos ☹</h2>
+                <GridProductsList v-else :products="productsList1" :containerClassStyles="['justify-start', 'items-center']" />
+            </template>
         </div>
         <hr>
         <div class="bg-beige text-black py-10 px-5 flex flex-col items-center justify-center gap-6">
-            <h2 v-if="brands.length === 0" class="text-center font-semibold text-lg underline underline-offset-4">No ha sido posible solicitar las marcas ☹</h2>
-            <GridBrandsList v-else :brands="brands"/>
+            <h2 v-if="isLoadingBrands" class="text-center font-semibold text-lg underline underline-offset-4">Estamos cargando las marcas...</h2>
+            <template v-else>
+                <h2 v-if="brands.length === 0" class="text-center font-semibold text-lg underline underline-offset-4">No ha sido posible solicitar las marcas ☹</h2>
+                <GridBrandsList v-else :brands="brands"/>
+            </template>
         </div>
         <hr>
         <Carousel />
@@ -20,8 +26,11 @@
         </ul>
         <hr>
         <div class="bg-beigeStrong p-10">
-            <h2 v-if="productsList2.length === 0" class="text-center font-semibold text-lg underline underline-offset-4">No ha sido posible solicitar los productos ☹</h2>
-            <GridProductsList v-else :containerClassStyles="['justify-start', 'items-center']" :products="productsList2" :title-list="'Otros productos interesantisimos!'" />
+            <h2 v-if="isLoadingProducts" class="text-center font-semibold text-lg underline underline-offset-4">Estamos cargando los productos...</h2>
+            <template v-else>
+                <h2 v-if="productsList2.length === 0" class="text-center font-semibold text-lg underline underline-offset-4">No ha sido posible solicitar los productos ☹</h2>
+                <GridProductsList v-else :products="productsList2" :containerClassStyles="['justify-start', 'items-center']" />
+            </template>
         </div>
         <hr>
     </div>
@@ -32,64 +41,65 @@ useHead({
   title: 'Principal | En la cuerda floja',
 })
 
-// STATE
 const token = ref('')
 const productsList1 = ref([])
 const productsList2 = ref([])
 const brands = ref([])
 
 
-// DOM state
 const caracteristics = ref([
     { icon: '🏠', title: 'Checkeá la guitarra', shortText: 'Pasá por el local para probarla' },
     { icon: '🆙', title: 'Hacemos que suene mejor', shortText: 'Calibracion y afinacion antes de la compra' },
     { icon: '👷‍♂️', title: 'Tambien arreglamos', shortText: 'bajos, charangos, y muchos mas' }
 ])
 
-// LIFECYCLE HOOKS
 onMounted(async () => {
     token.value = localStorage.getItem('en_la_cuerda_floja_token')
     await getUserInfo(token.value)
-    productsList1.value = await getProducts()
-    productsList2.value = await getProducts(8, 2)
-    brands.value = await getBrands()
+
+    await tryGetProducts()
+    await tryGetBrands()
 })
 
-const getProducts = async (paginateBy = 8, page = 1) => {
-    const urlAPI = 'http://127.0.0.1:8000/api/products'
-    const { data, pending, error, refresh } = await useFetch(urlAPI, {
-        query: {
-            page,
-            paginateBy,
-        }
-    })
-
-    if( error.value ){
-        console.log('Error al traer los productos: ', error.value.message);
-        return []
-    }
+const tryGetProducts = async() => { 
+    const responses = await Promise.all([
+        await getProducts({ endpoint: 'products', querySearchParams: {paginateBy: 8, page: 1} }),
+        await getProducts({ endpoint: 'products', querySearchParams: {paginateBy: 8, page: 2} })
+    ])
     
-    return data.value.data
+    if( gotErrorFetchingProducts(responses) ){
+        const errors = responses;
+        errors.forEach(error => {
+            console.error(error.message);
+        });
+
+        productsList1.value = []
+        productsList2.value = []
+    } else {
+        const [productsList1Response, productsList2Response] = responses
+        productsList1.value = productsList1Response.data
+        productsList2.value = productsList2Response.data
+    }
 }
 
-const getBrands = async () => {
-    const urlAPIBrands = `http://127.0.0.1:8000/api/brands`
-    const { data, pending, error } = await useFetch(urlAPIBrands)
+const tryGetBrands = async() => { 
+    const response = await getBrands({ endpoint: 'brands' })
 
-    if (error.value) {
-        console.log('Error al traer las marcas: ', error.value.message);
-        return []
+    if( gotErrorFetchingBrands([response]) ){
+        const error = response;
+        console.error(error.message);
+        brands.value = []
+    } else { 
+        const { data: someBrands } = response
+        brands.value = someBrands
     }
-
-    if (!data.value) {
-        return getBrands();
-    }
-
-    return data.value.data
 }
 
 // COMPOSABLES
 const { getUserInfo } = useAuthUser()
+const { getDataFromAPI: getProducts, isLoading: isLoadingProducts, gotError:gotErrorFetchingProducts } = useCallsApi()
+const { getDataFromAPI: getBrands, isLoading: isLoadingBrands, gotError:gotErrorFetchingBrands } = useCallsApi()
+
 </script>
 
 <style scoped></style>
