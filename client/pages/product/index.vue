@@ -13,8 +13,8 @@
                 <input type="number" readonly name="quantity" v-model.number="quantityOrdered" class="w-7 text-center text-xl font-bold bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                 <button type="button" @click="handleQuantity('add')" class="rounded-sm bg-gray-300 px-2 text-lg font-medium">+</button>
             </div>
-            <button :disabled="quantityNoSpecified" type="submit"
-                class="transition-colors p-2 rounded-md disabled:bg-gray-400 border-brown-900 bg-beigeStrong text-lg font-semibold shadow-md">Agregar
+            <button ref="addToCartButton" :disabled="quantityNoSpecified" type="submit"
+                class="transition-colors active:bg-emerald-400 duration-150 p-2 rounded-md disabled:bg-gray-400 border-brown-900 bg-beigeStrong text-lg font-semibold shadow-md">Agregar
                 al carrito</button>
         </form>
 
@@ -34,19 +34,19 @@ const store = useCartStore()
 const quantityOrdered = ref(0)
 const product = ref({})
 const loadingProduct = ref(true)
+const addToCartButton = ref(null)
 
 // COMPUTED
 const quantityNoSpecified = computed(() => quantityOrdered.value === 0)
-const nameProductFromUrl = computed(() => route.query.name)
+const nameProductFromUrl  = computed(() => route.query.name)
 
 // COMPOSABLES
 const route = useRoute()
 
 // LIFECYCLE HOOKS
 onMounted( async() => {
-    const {id, name} = route.query
+    const { id } = route.query
     product.value = await getProduct(id)
-    // console.log(product.value);
 })
 
 // METHODS
@@ -67,10 +67,22 @@ const getProduct = async (id) => {
     return data.value.product
 }
 
-const handleSubmit = (e) => {
-    if(quantityNoSpecified.value) {
+const handleSubmit = () => {
+    const buyingAnimationIsOn = addToCartButton.value.classList.contains('bg-emerald-400')
+    if(quantityNoSpecified.value || buyingAnimationIsOn) {
         return
     }
+
+    addToCartButton.value.classList.add('bg-emerald-400')
+
+    const previousText = addToCartButton.value.textContent
+    addToCartButton.value.textContent = 'Agregado ✅'
+    
+    setTimeout(() => {
+        addToCartButton.value.classList.remove('bg-emerald-400')
+        addToCartButton.value.classList.add('bg-beigeStrong')
+        addToCartButton.value.textContent = previousText
+    }, 1000);
     
     store.addToCart({
         ...product.value,
